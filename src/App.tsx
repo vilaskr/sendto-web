@@ -67,7 +67,8 @@ export default function App() {
   };
 
   useEffect(() => {
-    const newSocket = io(SOCKET_URL, {
+    const newSocket = io({
+      transports: ['polling', 'websocket'],
       reconnectionAttempts: 5,
       timeout: 10000,
     });
@@ -86,7 +87,10 @@ export default function App() {
     newSocket.on('connect_error', (err) => {
       console.error('Socket connection error:', err);
       setIsConnected(false);
-      addToast('Connection error. Retrying...', 'error');
+      // Only toast on first failure to avoid spamming
+      if (toasts.length === 0) {
+        addToast('Connection issue. Retrying...', 'info');
+      }
     });
 
     newSocket.on('room_created', (code: string) => {
@@ -212,8 +216,26 @@ export default function App() {
       addToast('Copied to clipboard!', 'success');
     } catch (err) {
       console.error('Clipboard copy error:', err);
-      // Fallback: suggest manual copy if in iframe
-      addToast('Copy blocked by browser. Try selecting text manually.', 'error');
+      // Fallback for iframes
+      try {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        if (successful) {
+          addToast('Copied to clipboard!', 'success');
+        } else {
+          throw new Error('Fallback failed');
+        }
+      } catch (fallbackErr) {
+        addToast('Browser blocked copy. Please select and copy manually.', 'error');
+      }
     }
   };
 
@@ -229,7 +251,7 @@ export default function App() {
       }
     } catch (err) {
       console.error('Clipboard paste error:', err);
-      addToast('Paste blocked. Please type or paste manually.', 'error');
+      addToast('Browser blocked paste. Please paste manually.', 'error');
     }
   };
 
