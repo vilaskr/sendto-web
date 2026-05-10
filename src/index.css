@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  
+  --color-brand-red: #ff3333;
+  --color-brand-yellow: #fff8e1;
+  --color-brand-cream: #fdf6e3;
+  --color-brand-bg: #f5f2ed;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-bg text-black font-sans;
+  }
+  
+  h1, h2, h3, h4 {
+    @apply font-display font-bold;
+  }
+}
+
+@layer components {
+  .brutal-card {
+    @apply bg-white border-4 border-black rounded-xl p-6 transition-all duration-200;
+    box-shadow: 8px 8px 0 #000;
+  }
+  
+  .brutal-button {
+    @apply px-6 py-3 font-display font-bold border-4 border-black rounded-lg transition-all duration-100 flex items-center justify-center gap-2;
+    box-shadow: 4px 4px 0 #000;
+  }
+
+  .brutal-button:hover {
+    @apply translate-x-[2px] translate-y-[2px];
+    box-shadow: 2px 2px 0 #000;
+  }
+
+  .brutal-button:active {
+    @apply translate-x-[4px] translate-y-[4px];
+    box-shadow: 0px 0px 0 #000;
+  }
+
+  .brutal-input {
+    @apply w-full px-4 py-3 border-4 border-black rounded-lg bg-white focus:outline-none focus:ring-4 focus:ring-brand-red/20 font-display font-bold text-xl;
+  }
+}
+

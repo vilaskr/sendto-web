@@ -1,0 +1,6 @@
+{
+  "name": "SENDTO",
+  "description": "Ultra-fast cross-device transfer tool for clipboard text, links, and files using 4-digit room codes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
